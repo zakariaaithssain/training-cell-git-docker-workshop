@@ -1,0 +1,11 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "A collaborative FastAPI project for learning Git branching, merging, and Docker containerization."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.136.0",
+    "pydantic-settings>=2.14.0",
+    "uvicorn>=0.44.0",
+]
