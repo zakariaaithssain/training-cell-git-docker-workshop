@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default("Workshop Marketplace") }}</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+</head>
+
+<body>
+
+    <header>
+        <a href="/" class="logo">Traning<span>Market</span></a>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            {% if user %}
+            <div style="color: var(--text-muted); font-size: 0.9rem;">
+                👤 {{ user.username }} | <a href="/logout"
+                    style="color: var(--danger-color); text-decoration: none;">Quitter</a>
+            </div>
+            {% else %}
+            <a href="/login" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Se
+                Connecter</a>
+            {% endif %}
+            <div class="cart-info">
+                🛒 <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="notification-container" class="notification-container"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>

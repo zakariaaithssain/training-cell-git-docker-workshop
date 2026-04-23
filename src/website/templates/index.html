@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <h1>Tous vos magasins sont Prêts, Commencez vos achats dès maintenant</h1>
+    <p>Découvrez les magasins que vous avez créés . Entrez dans un magasin et consultez les produits disponibles</p>
+</section>
+
+<div class="shop-grid">
+    {% for shop in shops %}
+    <a href="/shop/{{ shop.id }}" class="shop-card">
+        <h2>{{ shop.name }}</h2>
+        <p>Visiter ce magasin</p>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

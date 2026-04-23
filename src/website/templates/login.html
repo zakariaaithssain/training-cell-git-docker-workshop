@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Compétition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: var(--surface-color);
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid #D5D9D9;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            margin-bottom: 2rem;
+            color: var(--text-main);
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid #a6a6a6;
+            background: #FFFFFF;
+            color: var(--text-main);
+            font-family: inherit;
+            box-shadow: 0 1px 2px rgba(15, 17, 17, .15) inset;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007185;
+            box-shadow: 0 0 0 3px rgba(0, 113, 133, .2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--btn-amazon);
+            color: #0F1111;
+            border: 1px solid #A88734;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--btn-amazon-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h1>Connexion</h1>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Saisissez votre pseudonyme pour vous connecter ou
+            créer votre compte.</p>
+
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Entrez votre pseudonyme</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Entrez votre mot de passe</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Entrer dans la compétition</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
