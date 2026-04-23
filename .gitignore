@@ -5,3 +5,7 @@ venv/
 .venv/
 .idea/
 .vscode/
+
+# Bases de données SQLite
+*.db
+workshop.db
