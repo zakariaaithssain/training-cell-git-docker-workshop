@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="/" style="color: var(--primary-color); text-decoration: none;">← Retour au Catalogue</a>
+    <h1 style="margin-top: 1rem;">{{ shop_name }}</h1>
+    <p style="color: var(--text-muted)">Articles proposés par le groupe {{ shop_id }}</p>
+</div>
+
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <img src="/static/img/{{ product.image_filename }}" alt="{{ product.name }}" class="product-img" onerror="this.src='/static/img/default.jpg'; this.onerror=null;">
+        <div class="product-info">
+            <div class="product-category">{{ product.category }}</div>
+            <div class="product-title">{{ product.name }}</div>
+            <div class="product-desc">{{ product.description }}</div>
+            
+            <div class="product-footer">
+                <div class="product-price">{{ product.price }} DH</div>
+                <div id="stock-{{ product.id }}" class="stock-info {% if product.stock <= 3 %}low{% endif %}">
+                    Stock: {{ product.stock }}
+                </div>
+            </div>
+            
+            <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+                <strong>Acheté par :</strong>
+                <span id="buyers-{{ product.id }}">
+                    {% for purchase in product.purchases %}
+                        {{ purchase.user.username }}{% if not loop.last %}, {% endif %}
+                    {% else %}
+                        Aucun pour l'instant
+                    {% endfor %}
+                </span>
+            </div>
+            
+            {% if not user %}
+            <button class="btn-buy" style="margin-top: 1rem; width: 100%; background: #F0F2F2; color: #565959; border-color: #D5D9D9; cursor: not-allowed;" disabled>
+                Connectez-vous pour acheter
+            </button>
+            {% elif has_voted %}
+                {% if voted_product_id == product.id %}
+                <button class="btn-buy btn-cancel" style="margin-top: 1rem; width: 100%; background: #FFF; color: #B12704; border: 1px solid #B12704;" 
+                        onclick="cancelProduct({{ product.id }}, this)">
+                    Annuler mon achat ❌
+                </button>
+                {% else %}
+                <button class="btn-buy" style="margin-top: 1rem; width: 100%; background: #F0F2F2; color: #565959; border-color: #D5D9D9; cursor: not-allowed;" disabled>
+                    Vous avez déjà voté ailleurs ✅
+                </button>
+                {% endif %}
+            {% else %}
+            <button class="btn-buy" style="margin-top: 1rem; width: 100%;" 
+                    onclick="buyProduct({{ product.id }}, this)"
+                    {% if product.stock <= 0 %}disabled{% endif %}>
+                {% if product.stock <= 0 %}Rupture{% else %}Acheter pour la compétition !{% endif %}
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 4rem 0;">
+        Ce magasin est vide. Les étudiants n'ont pas encore ajouté d'articles !
+    </p>
+    {% endfor %}
+</div>
+{% endblock %}

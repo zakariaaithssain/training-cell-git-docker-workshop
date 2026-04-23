@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .results-hero {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, #131921 0%, #232f3e 100%);
+        color: white;
+        border-radius: 12px;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .trophy-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    .winner-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: #FF9900;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .winner-shop {
+        font-size: 1.5rem;
+        color: #E6E6E6;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .winner-stats {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-reveal {
+        background: var(--btn-amazon);
+        color: #0F1111;
+        border: 1px solid #A88734;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto 2rem auto;
+        transition: transform 0.2s, background 0.2s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-reveal:hover {
+        background: var(--btn-amazon-hover);
+        transform: translateY(-2px);
+    }
+
+    .leaderboard-container {
+        display: none;
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .rank-item {
+        display: flex;
+        align-items: center;
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid #D5D9D9;
+        transition: transform 0.2s;
+    }
+
+    .rank-item:hover {
+        transform: translateX(5px);
+        border-left-color: #007185;
+    }
+
+    .rank-item.rank-1 {
+        border-left-color: #FF9900;
+        background: #FFFAEB;
+    }
+
+    .rank-item.rank-2 {
+        border-left-color: #C0C0C0;
+    }
+
+    .rank-item.rank-3 {
+        border-left-color: #CD7F32;
+    }
+
+    .rank-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text-muted);
+        width: 40px;
+    }
+
+    .rank-details {
+        flex-grow: 1;
+    }
+
+    .rank-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .rank-shop {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .rank-score {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #007185;
+        background: #F0F2F2;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="results-hero">
+    {% if winner and winner.purchases > 0 %}
+    <div class="trophy-icon">🏆</div>
+    <p style="text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0;">Le Grand Vainqueur</p>
+    <h1 class="winner-title">{{ winner.product_name }}</h1>
+    <div class="winner-shop">Créé par {{ winner.shop_name }}</div>
+    <div class="winner-stats">
+        Acheté {{ winner.purchases }} fois !
+    </div>
+    {% else %}
+    <div class="trophy-icon">🤷</div>
+    <h1 class="winner-title">Aucun achat effectué</h1>
+    <p>La compétition n'a pas encore commencé ou personne n'a acheté de produit.</p>
+    {% endif %}
+</div>
+
+{% if leaderboard|length > 0 %}
+<button class="btn-reveal" id="btnReveal" onclick="revealLeaderboard()">Afficher le classement complet de tous les
+    produits</button>
+
+<div class="leaderboard-container" id="leaderboard">
+    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-main);">Classement Général</h2>
+
+    {% for item in leaderboard %}
+    <div class="rank-item {% if loop.index <= 3 %}rank-{{ loop.index }}{% endif %}">
+        <div class="rank-number">#{{ loop.index }}</div>
+        <div class="rank-details">
+            <div class="rank-name">{{ item.product_name }}</div>
+            <div class="rank-shop">{{ item.shop_name }}</div>
+        </div>
+        <div class="rank-score">
+            {{ item.purchases }} <span style="font-size: 0.8rem; font-weight: normal;">achats</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    function revealLeaderboard() {
+        const board = document.getElementById('leaderboard');
+        const btn = document.getElementById('btnReveal');
+        board.style.display = 'block';
+        btn.style.display = 'none';
+
+        // Scroll smoothly to the leaderboard
+        setTimeout(() => {
+            board.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+</script>
+{% endblock %}

@@ -1,15 +1,18 @@
-# Dockerfile - container recipe for the workshop app
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install dependencies first (cached layer)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY . . 
 
-# Copy application code
-COPY . .
+RUN pip install --no-cache-dir uv 
+RUN uv sync --frozen
 
-# Expose port and run
-EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Set PYTHONPATH to include src directory
+ENV PYTHONPATH=/app/src
+
+# Activate the virtual environment in PATH
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 8000 
+CMD ["uvicorn", "website.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ 

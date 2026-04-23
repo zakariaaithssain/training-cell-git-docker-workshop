@@ -5,7 +5,6 @@ venv/
 .venv/
 .idea/
 .vscode/
+app.egg-info/
 
-# Bases de données SQLite
 *.db
-workshop.db
