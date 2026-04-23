@@ -12,7 +12,7 @@ uv sync
 uvicorn website.main:app --reload
 ```
 
-Visit: http://localhost:8000/docs (Swagger UI)
+Visit: http://localhost:8000
 
 ### Notes
 - The app automatically mounts `/static` and `/templates` directories
