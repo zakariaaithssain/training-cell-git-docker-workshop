@@ -6,6 +6,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 import os
+from pathlib import Path
 
 from website.shops import group_1
 from website.core.database import get_db, engine
@@ -29,8 +30,9 @@ app = FastAPI(
 )
 
 # Setup Templates and Static files
-app.mount("/static", StaticFiles(directory="website/static"), name="static")
-templates = Jinja2Templates(directory="website/templates")
+BASE_DIR = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Include shop routers (API)
 app.include_router(group_1.router, prefix="/api/1", tags=["1 Shop"])
