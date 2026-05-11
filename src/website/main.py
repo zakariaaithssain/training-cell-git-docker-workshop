@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 
 from website.shops import group_1
+from website.shops import test
 from website.core.database import get_db, engine
 from website.core.init_db import init_db, seed_data
 from website.core.models import DBProduct, DBUser, DBPurchase
@@ -36,7 +37,7 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Include shop routers (API)
 app.include_router(group_1.router, prefix="/api/1", tags=["1 Shop"])
-
+app.include_router(test.router, prefix="/api/test", tags=["test Shop"])
 
 # --- DEPENDENCIES ---
 def get_current_user(request: Request, db: Session = Depends(get_db)):
@@ -82,7 +83,9 @@ async def index_web(request: Request, user: DBUser = Depends(get_current_user)):
         return RedirectResponse(url="/login", status_code=303)
         
     shops = [
-        {"id": "1", "name": group_1.shop_name}
+        {"id": "1", "name": group_1.shop_name},
+        {"id": "99", "name": test.shop_name}
+
     ]
     return templates.TemplateResponse(
         request=request, 
@@ -107,7 +110,7 @@ async def shop_web(request: Request, shop_id: str, db: Session = Depends(get_db)
             has_voted = True
             voted_product_id = purchase.product_id
         
-    shop_module = {"1": group_1}.get(shop_id)
+    shop_module = {"1": group_1, "99": test}.get(shop_id)
     shop_name = shop_module.shop_name if shop_module else f"Magasin {shop_id}"
         
     return templates.TemplateResponse(
@@ -185,7 +188,7 @@ async def results_page(request: Request, db: Session = Depends(get_db)):
     ).all()
     
     # Mapper les shop_id aux noms créatifs
-    shop_modules = {"1": group_1}
+    shop_modules = {"1": group_1, "99": test}
     
     formatted_results = []
     for product, count in leaderboard:
