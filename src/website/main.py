@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 import os
 from pathlib import Path
-
+from website.shops import group_19
 from website.shops import group_1
 from website.core.database import get_db, engine
 from website.core.init_db import init_db, seed_data
@@ -33,7 +33,7 @@ app = FastAPI(
 BASE_DIR = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
-
+app.include_router(group_19.router, prefix = "/api/19", tags=["19 Shop"])
 # Include shop routers (API)
 app.include_router(group_1.router, prefix="/api/1", tags=["1 Shop"])
 
@@ -83,6 +83,7 @@ async def index_web(request: Request, user: DBUser = Depends(get_current_user)):
         
     shops = [
         {"id": "1", "name": group_1.shop_name}
+        {"id": "19", "mafidnach": group_19.shop_name}
     ]
     return templates.TemplateResponse(
         request=request, 
