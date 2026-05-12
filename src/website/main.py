@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 import os
 from pathlib import Path
-
+from website.shops import group_12
 from website.shops import group_1
 from website.core.database import get_db, engine
 from website.core.init_db import init_db, seed_data
@@ -33,7 +33,7 @@ app = FastAPI(
 BASE_DIR = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
-
+app.include_router(group_12.router, prefix="/api/12", tags=["12 Shop"])
 # Include shop routers (API)
 app.include_router(group_1.router, prefix="/api/1", tags=["1 Shop"])
 
@@ -82,7 +82,8 @@ async def index_web(request: Request, user: DBUser = Depends(get_current_user)):
         return RedirectResponse(url="/login", status_code=303)
         
     shops = [
-        {"id": "1", "name": group_1.shop_name}
+        {"id": "1", "name": group_1.shop_name},
+        {"id": "12", "name": group_12.shop_lahommabarik}
     ]
     return templates.TemplateResponse(
         request=request, 
@@ -107,7 +108,7 @@ async def shop_web(request: Request, shop_id: str, db: Session = Depends(get_db)
             has_voted = True
             voted_product_id = purchase.product_id
         
-    shop_module = {"1": group_1}.get(shop_id)
+    shop_module = {"1": group_1, "12": group_12}.get(shop_id)
     shop_name = shop_module.shop_name if shop_module else f"Magasin {shop_id}"
         
     return templates.TemplateResponse(
@@ -185,7 +186,7 @@ async def results_page(request: Request, db: Session = Depends(get_db)):
     ).all()
     
     # Mapper les shop_id aux noms créatifs
-    shop_modules = {"1": group_1}
+    shop_modules = {"1": group_1, "12": group_12}
     
     formatted_results = []
     for product, count in leaderboard:

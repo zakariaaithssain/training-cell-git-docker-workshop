@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from website.core.database import engine, Base
 from website.core.models import DBProduct
 from website.shops import group_1
+from website.shops import group_12
 
 def init_db():
     # Create tables
@@ -11,6 +12,7 @@ def seed_data(db: Session):
     # Mapping of shop_id to their inventory module
     shops_data = {
         "1": group_1.inventory,
+        "12": group_12.inventory
     }
     
     # We DO NOT clear existing data anymore to preserve purchases and users.
