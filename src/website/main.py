@@ -82,7 +82,7 @@ async def index_web(request: Request, user: DBUser = Depends(get_current_user)):
         return RedirectResponse(url="/login", status_code=303)
         
     shops = [
-        {"id": "1", "name": group_1.shop_name}
+        {"id": "1", "name": group_1.shop_name},
         {"id": "19", "mafidnach": group_19.shop_name}
     ]
     return templates.TemplateResponse(
