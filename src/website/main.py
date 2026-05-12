@@ -83,7 +83,7 @@ async def index_web(request: Request, user: DBUser = Depends(get_current_user)):
         
     shops = [
         {"id": "1", "name": group_1.shop_name},
-        {"id": "12", "name": group_12.shop_lahommabarik}
+        {"id": "12", "name": group_12.shop_name}
     ]
     return templates.TemplateResponse(
         request=request, 

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from website.core.models import Product
 
 router = APIRouter()
-shop_name = "testt shop"
+shop_name = "lahommabarik shop"
 class ProductItem(BaseModel):
     name: str
     price: float
@@ -12,9 +12,7 @@ class ProductItem(BaseModel):
     image_filename: str
     stock: int = 10
 # les membres : ajoutez vos  produits ici
-inventory = [
-        Product(name="", price=, category="", stock=, image_filename="")
-]
+inventory = []
 @router.get("/products")
 def get_products():
     return inventory
